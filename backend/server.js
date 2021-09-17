@@ -12,7 +12,7 @@ dotenv.config()
 dbConnect()
 
 app.use(express.json())
-app.use('/api/user', userRoute)
+app.use('/api/users', userRoute)
 app.use(error.errorHandler)
 app.listen(PORT, ()=>{
   console.log('server is running')

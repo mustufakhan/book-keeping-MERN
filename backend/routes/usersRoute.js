@@ -3,6 +3,7 @@ const userRoute = express.Router()
 const asyncHandler = require('express-async-handler')
 const User = require('../models/User')
 const generataToken = require('../utils/generateToken')
+const authMiddleware = require('../middleware/authMiddleware')
 
 userRoute.post(
   '/register',
@@ -14,7 +15,7 @@ userRoute.post(
     }
     const user = await User.create({name, email, password})
     res.status(200)
-    res.send({
+    res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -29,7 +30,8 @@ userRoute.post('/login',
     const user = await User.findOne({email})
     if(user && await(user.isPasswordMatch(password))){
       res.status(200)
-      res.send({
+      res.json
+      ({
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -40,5 +42,9 @@ userRoute.post('/login',
       throw new Error('invalid credentails')
     }
 }))
+
+userRoute.get('/', authMiddleware,(req,res)=>{
+  res.send("fetch users")
+})
 
 module.exports = userRoute
